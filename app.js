@@ -7,6 +7,25 @@ const categories = [
   { key: "comms", label: "Communication & Change Management", prompt: "Is there a communication plan to support AI adoption and stakeholder trust?" },
 ];
 
+const sectorAdoptionData = [
+  { label: "Banking", percent: 52 },
+  { label: "Insurance", percent: 8 },
+  { label: "Investments", percent: 11 },
+  { label: "Payments", percent: 50 },
+  { label: "Lending", percent: 8 },
+  { label: "Pensions", percent: 14 },
+];
+
+const investmentBandData = [
+  { label: "<R1m", percent: 50 },
+  { label: "R1m-R5m", percent: 12 },
+  { label: "R6m-R10m", percent: 13 },
+  { label: "R11m-R16m", percent: 3 },
+  { label: "R17m-R20m", percent: 2 },
+  { label: "R21m-R30m", percent: 2 },
+  { label: ">R30m", percent: 18 },
+];
+
 const genAiUseCases = [
   "Algorithmic trading",
   "AML/CFT: behavioural or transaction monitoring",
@@ -44,6 +63,7 @@ const resetBtn = document.getElementById("resetBtn");
 buildQuestions();
 buildUseCases();
 setDefaultDate();
+drawPeerGraphs();
 
 form.addEventListener("submit", (event) => {
   event.preventDefault();
@@ -192,8 +212,30 @@ function renderResults(payload, result) {
   results.classList.remove("hidden");
 }
 
+function drawPeerGraphs() {
+  drawBarChart("peerAdoptionChart", sectorAdoptionData, {
+    maxValue: 60,
+    barColor: "#4f46e5",
+    yLabel: "% adoption",
+  });
+
+  drawBarChart("peerInvestmentChart", investmentBandData, {
+    maxValue: 55,
+    barColor: "#0f766e",
+    yLabel: "% share",
+  });
+}
+
 function drawScoreChart(scores) {
-  const canvas = document.getElementById("scoreChart");
+  drawBarChart(
+    "scoreChart",
+    scores.map((item) => ({ label: item.label.split(" ")[0], percent: item.score })),
+    { maxValue: 5, barColor: "#1f4f99", yLabel: "score" },
+  );
+}
+
+function drawBarChart(canvasId, data, options) {
+  const canvas = document.getElementById(canvasId);
   const ctx = canvas.getContext("2d");
   const width = canvas.width;
   const height = canvas.height;
@@ -202,40 +244,54 @@ function drawScoreChart(scores) {
   ctx.fillStyle = "#ffffff";
   ctx.fillRect(0, 0, width, height);
 
-  const padding = 50;
-  const barGap = 20;
-  const barWidth = (width - padding * 2 - barGap * (scores.length - 1)) / scores.length;
+  const padding = { top: 20, right: 14, bottom: 68, left: 46 };
+  const chartHeight = height - padding.top - padding.bottom;
+  const chartWidth = width - padding.left - padding.right;
+  const barGap = Math.max(8, Math.min(24, chartWidth / (data.length * 2.5)));
+  const barWidth = (chartWidth - barGap * (data.length - 1)) / data.length;
 
-  ctx.strokeStyle = "#c8d4eb";
+  ctx.strokeStyle = "#dbe3f2";
   ctx.lineWidth = 1;
-  for (let y = 0; y <= 5; y += 1) {
-    const yPos = height - padding - (y / 5) * (height - padding * 2);
+  const tickCount = 5;
+
+  for (let i = 0; i <= tickCount; i += 1) {
+    const value = (options.maxValue / tickCount) * i;
+    const y = padding.top + chartHeight - (value / options.maxValue) * chartHeight;
+
     ctx.beginPath();
-    ctx.moveTo(padding, yPos);
-    ctx.lineTo(width - padding, yPos);
+    ctx.moveTo(padding.left, y);
+    ctx.lineTo(width - padding.right, y);
     ctx.stroke();
 
     ctx.fillStyle = "#6b7280";
     ctx.font = "12px Segoe UI";
-    ctx.fillText(String(y), padding - 20, yPos + 4);
+    ctx.fillText(value.toFixed(options.maxValue <= 5 ? 1 : 0), 6, y + 4);
   }
 
-  scores.forEach((item, index) => {
-    const x = padding + index * (barWidth + barGap);
-    const barHeight = (item.score / 5) * (height - padding * 2);
-    const y = height - padding - barHeight;
+  data.forEach((item, index) => {
+    const x = padding.left + index * (barWidth + barGap);
+    const barHeight = (item.percent / options.maxValue) * chartHeight;
+    const y = padding.top + chartHeight - barHeight;
 
-    ctx.fillStyle = "#1f4f99";
+    ctx.fillStyle = options.barColor;
     ctx.fillRect(x, y, barWidth, barHeight);
 
-    ctx.fillStyle = "#111827";
-    ctx.font = "11px Segoe UI";
-    ctx.fillText(`${item.score}`, x + barWidth / 2 - 4, y - 6);
+    ctx.fillStyle = "#0f172a";
+    ctx.font = "bold 11px Segoe UI";
+    ctx.fillText(`${item.percent}${options.maxValue > 5 ? "%" : ""}`, x + 2, y - 6);
 
-    const shortLabel = item.label.split(" ")[0];
+    ctx.save();
+    ctx.translate(x + barWidth / 2, height - 14);
+    ctx.rotate(-Math.PI / 9);
     ctx.fillStyle = "#374151";
-    ctx.fillText(shortLabel, x, height - padding + 18);
+    ctx.font = "11px Segoe UI";
+    ctx.fillText(item.label, -barWidth / 2, 0);
+    ctx.restore();
   });
+
+  ctx.fillStyle = "#6b7280";
+  ctx.font = "12px Segoe UI";
+  ctx.fillText(options.yLabel, 6, 14);
 }
 
 function drawMaturityChart(average) {
