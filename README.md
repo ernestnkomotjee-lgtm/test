@@ -15,7 +15,6 @@ A lightweight browser app for law-firm technology and communications teams to ru
   - Maturity donut graph for each audit
 - Generates practical recommendations.
 - Lets you download audit files as JSON, CSV, and text report (`.txt`).
-- Includes a placeholder function (`generateAiSummary`) where you can later connect OpenAI.
 
 ## Logo setup
 
@@ -38,10 +37,7 @@ python3 -m http.server 8000
 
 Then visit `http://localhost:8000`.
 
-## Where to add OpenAI API
+## Where to add X
 
 Open `app.js` and edit:
 
-- `generateAiSummary(payload, result)`
-
-A common setup is to call your backend endpoint (e.g. `/api/summary`) from that function, and keep your OpenAI key in backend environment variables.
