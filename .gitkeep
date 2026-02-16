@@ -1,0 +1,40 @@
+# AI Readiness Audit Toolkit
+
+A lightweight browser app for law-firm technology and communications teams to run AI readiness audits for businesses.
+
+## What it does
+
+- Captures business and audit contact details.
+- Scores six AI readiness categories (1-5).
+- Includes extended South African financial-sector AI research questions (Q19-Q24).
+- Includes a multi-select checklist of generative AI value-chain use cases.
+- Displays visual scoring graphs:
+  - Category score bar graph
+  - Maturity donut graph
+- Generates practical recommendations.
+- Lets you download audit files as JSON, CSV, and text report (`.txt`).
+- Includes a placeholder function (`generateAiSummary`) where you can later connect OpenAI.
+
+## Logo setup
+
+Add the provided leopard logo image to this path:
+
+`assets/leopard-logo.png`
+
+The main banner loads the logo from that path.
+
+## Run locally
+
+```bash
+python3 -m http.server 8000
+```
+
+Then visit `http://localhost:8000`.
+
+## Where to add OpenAI API
+
+Open `app.js` and edit:
+
+- `generateAiSummary(payload, result)`
+
+A common setup is to call your backend endpoint (e.g. `/api/summary`) from that function, and keep your OpenAI key in backend environment variables.
