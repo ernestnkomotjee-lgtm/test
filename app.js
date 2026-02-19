@@ -1,44 +1,80 @@
 const sourceFeeds = [
-  { name: "Regulator notices (NERSA, DMRE, DoE)", status: "Connected" },
-  { name: "Environmental compliance databases", status: "Connected" },
-  { name: "Grid and dispatch market updates", status: "Connected" },
-  { name: "Project finance and tariff announcements", status: "Connected" },
-  { name: "Corporate IP/news litigation watch", status: "Pilot" },
-  { name: "OEM and supply-chain disruption feeds", status: "Connected" },
+  {
+    source: "NERSA licensing notices",
+    domain: "Regulation",
+    coverage: "Generation licences, amendments, exemptions",
+    cadence: "Daily",
+    status: "Live",
+  },
+  {
+    source: "DMRE + IPP Office procurement updates",
+    domain: "Market",
+    coverage: "REIPPPP rounds, bid windows, preferred bidder updates",
+    cadence: "Daily",
+    status: "Live",
+  },
+  {
+    source: "South African Gazette & environmental authorisations",
+    domain: "Compliance",
+    coverage: "EIA approvals, water-use licences, permit conditions",
+    cadence: "Daily",
+    status: "Live",
+  },
+  {
+    source: "Eskom grid and transmission bulletins",
+    domain: "Operations",
+    coverage: "Grid constraints, curtailment risk, connection backlogs",
+    cadence: "Weekly",
+    status: "Live",
+  },
+  {
+    source: "WIPO + CIPC IP disputes and filings",
+    domain: "IP",
+    coverage: "Battery chemistry patents, manufacturing process disputes",
+    cadence: "Weekly",
+    status: "Pilot",
+  },
+  {
+    source: "IEA / IRENA / BNEF market trackers",
+    domain: "Intelligence",
+    coverage: "Cell pricing, project pipeline, supply-chain pressure signals",
+    cadence: "Monthly",
+    status: "Live",
+  },
 ];
 
 const modules = [
   {
     id: "battery",
     title: "Battery Manufacturing Barometer",
-    description: "Tracks manufacturing compliance resilience, permitting quality, and supply-chain legality.",
+    description: "Compliance and market-risk tracking for battery plants, importers, and recyclers.",
     indicators: [
-      { key: "traceability", label: "Critical mineral traceability and sourcing due diligence" },
-      { key: "safety", label: "Plant safety, emissions, and hazardous-material compliance" },
-      { key: "certification", label: "Product certification and cross-border standards readiness" },
-      { key: "waste", label: "End-of-life battery recycling and waste reporting compliance" },
+      { key: "traceability", label: "Critical mineral traceability (OECD due diligence + sanctions screening)" },
+      { key: "safety", label: "Plant safety and hazardous material controls (OHS + emissions permits)" },
+      { key: "certification", label: "Product conformity readiness (IEC/UL transport + storage standards)" },
+      { key: "waste", label: "Battery take-back and end-of-life recycling reporting" },
     ],
   },
   {
     id: "ipp",
     title: "IPP Compliance Barometer",
-    description: "Tracks permitting, offtake obligations, market dispatch, and governance hygiene for IPPs.",
+    description: "Regulatory performance tracking for utility-scale and C&I IPP portfolios.",
     indicators: [
-      { key: "licensing", label: "Generation licensing and permit renewal status" },
-      { key: "ppa", label: "PPA/offtake contract compliance and obligations delivery" },
-      { key: "grid", label: "Grid code adherence, curtailment handling, and dispatch compliance" },
-      { key: "reporting", label: "Regulatory reporting, governance, and audit trail maturity" },
+      { key: "licensing", label: "Generation licensing and permit validity (NERSA + municipal)" },
+      { key: "ppa", label: "PPA and offtake compliance (availability, dispatch, settlement)" },
+      { key: "grid", label: "Grid-code performance and curtailment compliance" },
+      { key: "reporting", label: "Regulatory reporting and audit trail completeness" },
     ],
   },
   {
     id: "renewables",
     title: "Wind & Solar Farm Barometer",
-    description: "Tracks land, environmental, operational, and community-facing compliance performance.",
+    description: "Project-level compliance health for wind and solar assets through construction and operation.",
     indicators: [
-      { key: "land", label: "Land-use rights, zoning, and community consultation compliance" },
-      { key: "env", label: "Environmental impact conditions and biodiversity obligations" },
-      { key: "operations", label: "Operations/maintenance compliance and incident management" },
-      { key: "community", label: "Local content, labour, and socio-economic commitments" },
+      { key: "land", label: "Land rights, servitudes, and community consultation obligations" },
+      { key: "env", label: "EIA condition compliance (biodiversity, noise, avifauna, water)" },
+      { key: "operations", label: "Operational compliance (HSE incidents, outage reporting, maintenance)" },
+      { key: "community", label: "Local content, jobs, and socio-economic development commitments" },
     ],
   },
 ];
@@ -70,7 +106,17 @@ downloadBtn.addEventListener("click", () => {
 function buildSourceFeedTiles() {
   sourceList.innerHTML = sourceFeeds
     .map(
-      (feed) => `<div class="source-tile"><strong>${feed.status}</strong><span>${feed.name}</span></div>`,
+      (feed) => `
+        <div class="source-tile">
+          <div class="source-head">
+            <strong>${feed.status}</strong>
+            <span>${feed.domain}</span>
+          </div>
+          <h4>${feed.source}</h4>
+          <p>${feed.coverage}</p>
+          <small>Cadence: ${feed.cadence}</small>
+        </div>
+      `,
     )
     .join("");
 }
@@ -148,7 +194,7 @@ function getLevel(score) {
 }
 
 function renderSnapshot(snapshot) {
-  overallSummary.innerHTML = `<strong>${snapshot.organisation}</strong> in <strong>${snapshot.region}</strong> is currently <strong>${snapshot.overallLevel}</strong> at <strong>${snapshot.overallScore}/5</strong>.`;
+  overallSummary.innerHTML = `<strong>${snapshot.organisation}</strong> (${snapshot.region}) is <strong>${snapshot.overallLevel}</strong> at <strong>${snapshot.overallScore}/5</strong>.`; 
 
   barometerCards.innerHTML = snapshot.moduleScores
     .map(
@@ -171,9 +217,9 @@ function renderSnapshot(snapshot) {
     ${
       lowItems.length
         ? `<ol>${lowItems
-            .map((item) => `<li><strong>${item.module}:</strong> escalate ${item.label.toLowerCase()} with legal/compliance review.</li>`)
+            .map((item) => `<li><strong>${item.module}:</strong> investigate ${item.label.toLowerCase()} and trigger legal/compliance escalation this week.</li>`)
             .join("")}</ol>`
-        : "<p>No critical weak points flagged. Continue monitoring with weekly source ingestion.</p>"
+        : "<p>No critical weak points flagged. Keep ingestion cadence and monitor regulatory change notices.</p>"
     }
   `;
 

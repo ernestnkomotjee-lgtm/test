@@ -14,8 +14,8 @@
         <p class="eyebrow">Energy & Natural Resources</p>
         <h1>Regulation, Compliance & Market Intelligence Monitor</h1>
         <p>
-          An ENR monitoring device with agential source tracking and barometer scoring for battery manufacturing,
-          independent power producers (IPPs), and wind/solar farms.
+          ENR intelligence workspace with agential connectors across regulatory notices, market feeds,
+          and legal databases. Includes three core barometers: battery manufacturing, IPPs, and wind/solar farms.
         </p>
       </div>
     </div>
@@ -23,16 +23,15 @@
 
   <main>
     <section class="card intro">
-      <h2>Monitoring architecture</h2>
+      <h2>Source connector status</h2>
       <p>
-        This prototype tracks whether your intelligence agents are connected to core news streams and key databases,
-        then scores three operational modules against compliance-critical indicators.
+        The feeds below are ENR-relevant sources used by the monitoring agent to keep compliance and market signals current.
       </p>
       <div class="source-grid" id="source-list"></div>
     </section>
 
     <section class="card">
-      <h2>Assessment input</h2>
+      <h2>Barometer scoring input</h2>
       <form id="monitor-form">
         <div class="grid two">
           <label>
@@ -53,7 +52,7 @@
           </label>
         </div>
 
-        <h3>Module barometer scoring (1 weak - 5 strong)</h3>
+        <h3>Score each indicator from 1 (weak) to 5 (strong)</h3>
         <div id="module-list" class="grid one"></div>
 
         <div class="actions">
@@ -72,8 +71,7 @@
   </main>
 
   <footer>
-    ENR monitor prototype • Agential connectors and module scoring can be wired to live APIs in <code>sourceFeeds</code> and
-    <code>modules</code> in <code>app.js</code>.
+    Prototype only: wire <code>sourceFeeds</code> and <code>modules</code> in <code>app.js</code> to your live APIs and document stores.
   </footer>
 
   <script src="app.js"></script>

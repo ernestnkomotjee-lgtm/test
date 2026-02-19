@@ -73,7 +73,7 @@ main {
 
 .source-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
   gap: 0.7rem;
   margin-top: 0.8rem;
 }
@@ -87,9 +87,35 @@ main {
   background: #fbfdff;
 }
 
-.source-tile strong {
-  display: block;
+.source-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.3rem;
+}
+
+.source-head strong {
+  color: #166534;
+}
+
+.source-head span {
   color: #1e3a8a;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.source-tile h4 {
+  margin: 0.25rem 0;
+  font-size: 0.98rem;
+}
+
+.source-tile p {
+  margin: 0.2rem 0;
+  color: #334155;
+}
+
+.source-tile small {
+  color: var(--muted);
 }
 
 .grid {

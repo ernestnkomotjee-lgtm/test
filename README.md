@@ -1,15 +1,20 @@
 # ENR Regulation, Compliance & Market Intelligence Monitor
 
-A lightweight browser prototype for an Energy & Natural Resources (ENR) monitoring device.
+A browser-based ENR monitoring prototype focused on real regulatory and market-intelligence domains.
 
 ## What it does
 
-- Tracks agential source connectivity against key news and database feeds.
-- Produces a compliance barometer for **Battery Manufacturing**.
-- Produces a compliance barometer for **Independent Power Producers (IPPs)**.
-- Produces a compliance barometer for **Wind & Solar Farms**.
-- Flags weak indicators (score <= 2) as priority intelligence actions.
-- Exports a timestamped JSON snapshot for downstream systems.
+- Maps agent connector coverage across practical ENR sources (NERSA, DMRE/IPP Office, Gazette/EIA, Eskom grid bulletins, WIPO/CIPC, IEA/IRENA/BNEF).
+- Scores three ENR barometers:
+  - Battery Manufacturing
+  - Independent Power Producers (IPPs)
+  - Wind & Solar Farms
+- Uses 1-5 indicator scoring to produce module and overall status:
+  - `< 2.8` = At risk
+  - `2.8 - <4` = Watchlist
+  - `>= 4` = Stable
+- Automatically flags indicator scores `<= 2` as priority legal/compliance escalations.
+- Exports JSON snapshots for integration into downstream reporting pipelines.
 
 ## Run locally
 
@@ -17,11 +22,11 @@ A lightweight browser prototype for an Energy & Natural Resources (ENR) monitori
 python3 -m http.server 8000
 ```
 
-Then open `http://localhost:8000`.
+Open `http://localhost:8000`.
 
-## Configure modules and sources
+## Configure for your environment
 
-Edit `app.js`:
+Update `app.js`:
 
-- `sourceFeeds` for the connected monitoring streams.
-- `modules` for each barometer and its scoring indicators.
+- `sourceFeeds`: your active data connectors and cadence.
+- `modules`: your barometer definitions and indicator set.
