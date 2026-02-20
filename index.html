@@ -3,18 +3,19 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>AI Readiness Audit | AI Audit Toolkit</title>
+  <title>ENR Compliance & Market Intelligence Monitor</title>
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
   <header class="hero">
     <div class="hero-wrap">
-      <img class="hero-logo" src="CDH_Leopard - 010 no background.png" alt="CDH_Leopard - 010 no background.png" />
+      <img class="hero-logo" src="CDH_Leopard - 010 no background.png" alt="ENR monitor logo" />
       <div>
-        <p class="eyebrow">South Africa • Legal Sector</p>
-        <h1>AI Readiness Audit Toolkit</h1>
+        <p class="eyebrow">Energy & Natural Resources</p>
+        <h1>Regulation, Compliance & Market Intelligence Monitor</h1>
         <p>
-          A practical internal tool for you to assess how you are adopting and scaling your AI ecosytem. 
+          ENR intelligence workspace with agential connectors across regulatory notices, market feeds,
+          and legal databases. Includes three core barometers: battery manufacturing, IPPs, and wind/solar farms.
         </p>
       </div>
     </div>
@@ -22,140 +23,57 @@
 
   <main>
     <section class="card intro">
-      <h2>How it works</h2>
-      <ol>
-        <li>Capture client/business details.</li>
-        <li>Score each AI readiness category from 1 (weak) to 5 (strong).</li>
-        <li>Capture the extended financial-sector governance and GenAI questions.</li>
-        <li>Review graphs + recommendations and download your report files.</li>
-      </ol>
-      <p class="hint">Tip: later you can connect this app to Dynamics 365 in <code>generateAiSummary()</code> in <code>app.js</code>.</p>
-
-      <section class="peer-section">
-        <h3>How your peers are doing (South African financial services)</h3>
-        <p>
-          Based on SARB/FSCA databook survey figures, AI adoption is still uneven across financial-services segments,
-          with higher penetration in banking and payments and lower penetration in insurance, lending, and investments.
-        </p>
-        <div class="peer-metrics">
-          <div class="metric-tile"><strong>~2050</strong><span>Total survey responses</span></div>
-          <div class="metric-tile"><strong>220</strong><span>Respondents using AI</span></div>
-          <div class="metric-tile"><strong>10.6%</strong><span>AI usage across sector</span></div>
-        </div>
-
-        <div class="chart-grid peer-charts">
-          <div class="chart-card">
-            <h3>AI adoption by sector (%)</h3>
-            <div class="chart-box">
-              <canvas id="adoptionChart"></canvas>
-            </div>
-          </div>
-
-          <div class="chart-card">
-            <h3>Intended AI investment (2024)</h3>
-            <div class="chart-box">
-              <canvas id="investmentChart"></canvas>
-            </div>
-          </div>
-        </div>
-
-        <p class="hint">Source: SARB/FSCA Artificial Intelligence in the South African Financial Sector Databook.</p>
-      </section>
+      <h2>Source connector status</h2>
+      <p>
+        The feeds below are ENR-relevant sources used by the monitoring agent to keep compliance and market signals current.
+      </p>
+      <div class="source-grid" id="source-list"></div>
     </section>
 
     <section class="card">
-      <h2>Audit Details</h2>
-      <form id="audit-form">
+      <h2>Barometer scoring input</h2>
+      <form id="monitor-form">
         <div class="grid two">
           <label>
-            Business Name
-            <input type="text" id="businessName" required placeholder="Example: Ubuntu Manufacturing" />
+            Organisation
+            <input type="text" id="organisation" required placeholder="Example: ENR Portfolio Operations" />
           </label>
           <label>
-            Industry
-            <input type="text" id="industry" required placeholder="Example: Financial Services" />
+            Coverage Region
+            <input type="text" id="region" required placeholder="Example: South Africa + SADC" />
           </label>
           <label>
-            Contact Person
-            <input type="text" id="contact" required placeholder="Name + role" />
+            Lead Analyst
+            <input type="text" id="analyst" required placeholder="Example: Market Intelligence Lead" />
           </label>
           <label>
-            Audit Date
-            <input type="date" id="auditDate" required />
+            Reporting Date
+            <input type="date" id="reportDate" required />
           </label>
         </div>
 
-        <h3>AI Readiness Categories</h3>
-        <div id="question-list" class="grid one"></div>
-
-        <h3>Financial Sector AI Research Questions</h3>
-        <div class="grid one">
-          <label>
-            19) Customer-facing AI disclosures
-            <textarea id="q19" rows="3" placeholder="What disclosures do you provide for customer-facing AI applications?"></textarea>
-          </label>
-          <label>
-            20) AI testing and validation controls
-            <textarea id="q20" rows="3" placeholder="How do you ensure testing and validation of AI models for reliable outputs?"></textarea>
-          </label>
-          <label>
-            21) Safe/sound/responsible AI adoption methods
-            <textarea id="q21" rows="3" placeholder="Which approaches are most suitable for the financial sector?"></textarea>
-          </label>
-          <label>
-            22) Regulatory simplification/strengthening ideas
-            <textarea id="q22" rows="3" placeholder="How should regulation be simplified, strengthened or extended for AI risks?"></textarea>
-          </label>
-          <label>
-            23) AI/ML use across value chain (example)
-            <textarea id="q23" rows="3" placeholder="Provide one example and explain implementation."></textarea>
-          </label>
-          <label>
-            24) Generative AI use across value chain (example)
-            <textarea id="q24" rows="3" placeholder="Provide one example and explain implementation."></textarea>
-          </label>
-        </div>
-
-        <h3>Generative AI Use Cases (select all that apply)</h3>
-        <div id="usecase-list" class="grid two"></div>
+        <h3>Score each indicator from 1 (weak) to 5 (strong)</h3>
+        <div id="module-list" class="grid one"></div>
 
         <div class="actions">
-          <button type="submit">Generate Audit Result</button>
-          <button type="button" id="downloadJsonBtn">Download JSON</button>
-          <button type="button" id="downloadCsvBtn">Download CSV</button>
-          <button type="button" id="downloadTxtBtn">Download Text Report</button>
-          <button type="reset" id="resetBtn" class="secondary">Reset</button>
+          <button type="submit">Generate ENR barometer</button>
+          <button type="button" id="downloadBtn" class="secondary">Download JSON snapshot</button>
         </div>
       </form>
     </section>
 
-    <section id="results" class="card hidden" aria-live="polite">
-      <h2>Audit Results</h2>
-      <div id="score-breakdown"></div>
-      <div class="chart-grid">
-        <div>
-          <h3>Category Score Graph</h3>
-          <canvas id="scoreChart" width="900" height="300"></canvas>
-        </div>
-        <div>
-          <h3>Maturity Graph</h3>
-          <canvas id="maturityChart" width="280" height="280"></canvas>
-        </div>
-      </div>
-      <div id="recommendations"></div>
-      <p class="contact-line"><strong>Reach out to us at <a href="mailto:FuturefitAI@legal.com">FuturefitAI@legal.com</a>.</strong></p>
-      <details>
-        <summary>Optional AI-generated narrative (placeholder)</summary>
-        <p id="ai-summary">No AI summary generated yet.</p>
-      </details>
+    <section id="results" class="card hidden">
+      <h2>Barometer output</h2>
+      <p id="overall-summary"></p>
+      <div id="barometer-cards" class="chart-grid"></div>
+      <div id="priority-actions"></div>
     </section>
   </main>
 
   <footer>
-    Built for legal-tech advisory workflows. Data stays in-browser unless you add your own backend/API.
+    Prototype only: wire <code>sourceFeeds</code> and <code>modules</code> in <code>app.js</code> to your live APIs and document stores.
   </footer>
 
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <script src="app.js" defer></script>
+  <script src="app.js"></script>
 </body>
 </html>

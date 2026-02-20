@@ -1,33 +1,20 @@
-# AI Readiness Audit Toolkit
+# ENR Regulation, Compliance & Market Intelligence Monitor
 
-A lightweight browser app for law-firm technology and communications teams to run AI readiness audits for businesses.
+A browser-based ENR monitoring prototype focused on real regulatory and market-intelligence domains.
 
 ## What it does
 
-- Captures business and audit contact details.
-- Scores six AI readiness categories (1-5).
-- Includes extended South African financial-sector AI research questions (Q19-Q24).
-- Includes a multi-select checklist of generative AI value-chain use cases.
-- Displays visual graphs:
-  - Peer benchmark graph: AI adoption by sector in South African financial services
-  - Peer benchmark graph: intended AI investment bands (2024)
-  - Category score bar graph for each audit
-  - Maturity donut graph for each audit
-- Generates practical recommendations.
-- Lets you download audit files as JSON, CSV, and text report (`.txt`).
-
-## Logo setup
-
-Add the provided leopard logo image to this path:
-
-`assets/leopard-logo.png`
-
-The main banner loads the logo from that path.
-
-## Chart rendering
-
-- Peer benchmark charts use Chart.js via CDN in `index.html`.
-- If Chart.js is unavailable, the app falls back to canvas-drawn bars for the peer charts.
+- Maps agent connector coverage across practical ENR sources (NERSA, DMRE/IPP Office, Gazette/EIA, Eskom grid bulletins, WIPO/CIPC, IEA/IRENA/BNEF).
+- Scores three ENR barometers:
+  - Battery Manufacturing
+  - Independent Power Producers (IPPs)
+  - Wind & Solar Farms
+- Uses 1-5 indicator scoring to produce module and overall status:
+  - `< 2.8` = At risk
+  - `2.8 - <4` = Watchlist
+  - `>= 4` = Stable
+- Automatically flags indicator scores `<= 2` as priority legal/compliance escalations.
+- Exports JSON snapshots for integration into downstream reporting pipelines.
 
 ## Run locally
 
@@ -35,9 +22,11 @@ The main banner loads the logo from that path.
 python3 -m http.server 8000
 ```
 
-Then visit `http://localhost:8000`.
+Open `http://localhost:8000`.
 
-## Where to add X
+## Configure for your environment
 
-Open `app.js` and edit:
+Update `app.js`:
 
+- `sourceFeeds`: your active data connectors and cadence.
+- `modules`: your barometer definitions and indicator set.
